@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>~/writing — j4mes.dev</title>
+  <meta name="description" content="Writing by James Davies — offensive security, tools, career, and everything else.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+  <canvas id="matrix"></canvas>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-search">
+        <a href="/index.html" class="nav-brand"><span class="u">j4mes</span>@<span class="h">j4mes.dev</span>:~$</a>&nbsp;<input type="text" id="search-input" autocomplete="off" spellcheck="false" aria-label="Search"><span class="search-cursor" id="search-cursor"></span><span id="search-ghost"></span>
+        <div class="search-results" id="search-results"></div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/writing.html" class="active">~/writing</a></li>
+        <li><a href="/about.html">~/about</a></li>
+        <li><a href="https://github.com/j4mesdev" target="_blank" rel="noopener">~/github</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+    <div class="page-header fade-up d1">
+      <p class="page-cmd"><span class="dollar">$</span> cat ~/writing</p>
+      <h1 class="page-title">writing</h1>
+      <p class="page-sub" id="post-count">-- posts</p>
+    </div>
+
+    <div class="tag-filters fade-up d2">
+      <button class="tag-btn active" data-tag="all">all</button>
+      <button class="tag-btn" data-tag="--offsec">--offsec</button>
+      <button class="tag-btn" data-tag="--cert">--cert</button>
+      <button class="tag-btn" data-tag="--tools">--tools</button>
+      <button class="tag-btn" data-tag="--career">--career</button>
+      <button class="tag-btn" data-tag="--ctf">--ctf</button>
+    </div>
+
+    <div class="post-list fade-up d3" id="post-list">
+
+      <!-- =====================================================
+           ADD NEW POSTS HERE — copy one <a> block, update:
+           - href (url to the post file)
+           - data-tag (must match one of the tag buttons above)
+           - post-date, post-title, post-tag, post-excerpt
+           Also add an entry to SEARCH_INDEX in nav.js
+           ===================================================== -->
+
+      <a href="/posts/getting-oscp-2026.html" class="post-item" data-tag="--cert">
+        <span class="post-date">2026-03-15</span>
+        <span class="post-title">Getting OSCP in 2026 — what actually changed</span>
+        <span class="post-tag">--cert</span>
+        <span class="post-excerpt">The exam is not what most guides written in 2022 will tell you. Here's what I'd tell someone starting today.</span>
+      </a>
+
+      <a href="/posts/why-i-use-ffuf.html" class="post-item" data-tag="--tools">
+        <span class="post-date">2026-02-28</span>
+        <span class="post-title">Why I use FFUF over everything else</span>
+        <span class="post-tag">--tools</span>
+        <span class="post-excerpt">It's fast, flexible, and once you understand the flags it becomes second nature on every engagement.</span>
+      </a>
+
+      <a href="/posts/salary-negotiation.html" class="post-item" data-tag="--career">
+        <span class="post-date">2026-02-10</span>
+        <span class="post-title">Salary negotiation as a pentester — my experience</span>
+        <span class="post-tag">--career</span>
+        <span class="post-excerpt">What I learned from negotiating my last offer and what I'd do differently next time.</span>
+      </a>
+
+      <a href="/posts/htb-lateral-movement.html" class="post-item" data-tag="--ctf">
+        <span class="post-date">2026-01-22</span>
+        <span class="post-title">HTB writeup — breaking down a lateral movement chain</span>
+        <span class="post-tag">--ctf</span>
+        <span class="post-excerpt">Walking through a full lateral movement chain from initial foothold to domain admin.</span>
+      </a>
+
+      <a href="/posts/evasion-basics.html" class="post-item" data-tag="--offsec">
+        <span class="post-date">2026-01-08</span>
+        <span class="post-title">AV evasion basics — what still works in 2026</span>
+        <span class="post-tag">--offsec</span>
+        <span class="post-excerpt">A practical look at what defenders are catching and what still slips through on real engagements.</span>
+      </a>
+
+    </div>
+
+    <p class="no-posts" id="no-posts">no posts tagged <span class="nm" id="no-posts-tag"></span></p>
+
+  </main>
+
+  <footer>
+    <span class="footer-copy">© 2026 j4mes.dev</span>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    /* ── Tag filter ── */
+    const posts      = document.querySelectorAll('.post-item');
+    const tagBtns    = document.querySelectorAll('.tag-btn');
+    const noPostsEl  = document.getElementById('no-posts');
+    const noPostsTag = document.getElementById('no-posts-tag');
+    const countEl    = document.getElementById('post-count');
+
+    function updateCount() {
+      const visible = document.querySelectorAll('.post-item:not(.hidden)').length;
+      countEl.textContent = `${visible} post${visible !== 1 ? 's' : ''}`;
+    }
+
+    updateCount();
+
+    tagBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tagBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tag = btn.dataset.tag;
+        let anyVisible = false;
+        posts.forEach(post => {
+          if (tag === 'all' || post.dataset.tag === tag) {
+            post.classList.remove('hidden');
+            anyVisible = true;
+          } else {
+            post.classList.add('hidden');
+          }
+        });
+        noPostsEl.style.display = anyVisible ? 'none' : 'block';
+        noPostsTag.textContent  = tag;
+        updateCount();
+      });
+    });
+  </script>
+
+</body>
+</html>

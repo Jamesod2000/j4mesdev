@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — j4mes.dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:      #0d0d0d;
+      --surface: #111111;
+      --border:  #1a1a1a;
+      --text:    #e0e0e0;
+      --muted:   #666666;
+      --accent:  #ff2222;
+      --mono:    'JetBrains Mono', monospace;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: var(--mono);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: var(--accent); color: #fff; }
+
+    #matrix {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; opacity: 0.03;
+    }
+
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      pointer-events: none; z-index: 999;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.012) 2px, rgba(0,0,0,0.012) 4px
+      );
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      background: rgba(13,13,13,0.88);
+    }
+
+    .nav-inner {
+      max-width: 760px; margin: 0 auto;
+      padding: 0.9rem 2rem;
+      display: flex; align-items: center; gap: 2rem;
+    }
+
+    .nav-brand {
+      font-size: 0.78rem; font-weight: 400;
+      color: var(--muted); text-decoration: none;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .nav-brand .u { color: var(--accent); }
+    .nav-brand .h { color: var(--text); }
+
+    .nav-links {
+      display: flex; gap: 1.75rem; list-style: none;
+      flex-shrink: 0; margin-left: auto;
+    }
+    .nav-links a {
+      font-size: 0.72rem; color: #cccccc;
+      text-decoration: none; letter-spacing: 0.06em; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    @keyframes blink  { 50% { opacity: 0; } }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Page ── */
+    .fourofour {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative; z-index: 1;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    /* ── ASCII art ── */
+    .svg-404 {
+      width: 100%;
+      max-width: 580px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease 0.2s forwards;
+    }
+
+    /* ── Terminal block ── */
+    .term-404 {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 580px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease 0.5s forwards;
+    }
+
+    .term-header {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .td-red    { background: #ff5f57; }
+    .td-yellow { background: #febc2e; }
+    .td-green  { background: #28c840; }
+    .term-title { font-size: 0.65rem; color: var(--muted); margin-left: 4px; }
+
+    .term-body {
+      padding: 1rem 1.25rem;
+      font-size: 0.78rem;
+      line-height: 2;
+    }
+
+    .t-cmd   { color: var(--muted); display: block; }
+    .t-err   { color: var(--accent); display: block; }
+    .t-blank { display: block; height: 1.2em; }
+    .t-nav   { display: block; }
+    .t-nav .arrow { color: var(--text); }
+    .t-nav a {
+      color: var(--accent); text-decoration: none;
+      border-bottom: 1px solid rgba(255,34,34,0.3);
+      transition: border-color 0.2s;
+    }
+    .t-nav a:hover { border-color: var(--accent); }
+    .t-nav .sep { color: var(--muted); margin: 0 0.5rem; }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+      text-align: center;
+    }
+    .footer-copy { font-size: 0.68rem; color: var(--border); }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix"></canvas>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="/index.html" class="nav-brand"><span class="u">j4mes</span>@<span class="h">j4mes.dev</span>:~$</a>
+      <ul class="nav-links">
+        <li><a href="/writing.html">~/writing</a></li>
+        <li><a href="/about.html">~/about</a></li>
+        <li><a href="https://github.com/j4mesdev" target="_blank" rel="noopener">~/github</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="fourofour">
+
+    <svg class="svg-404" viewBox="0 0 580 220" xmlns="http://www.w3.org/2000/svg">
+  <text x="50%" y="195" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="220" fill="none" stroke="#ff2222" stroke-width="2" letter-spacing="-8">404</text>
+</svg>
+
+    <div class="term-404">
+      <div class="term-header">
+        <span class="term-dot td-red"></span>
+        <span class="term-dot td-yellow"></span>
+        <span class="term-dot td-green"></span>
+        <span class="term-title">j4mes@j4mes.dev:~</span>
+      </div>
+      <div class="term-body" id="term-body"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span class="footer-copy">© 2026 j4mes.dev</span>
+  </footer>
+
+  <script>
+    /* ── Matrix ── */
+    (function() {
+      const canvas = document.getElementById('matrix');
+      const ctx    = canvas.getContext('2d');
+      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      resize();
+      window.addEventListener('resize', () => { resize(); init(); });
+      const chars = 'アイウエオカキクケコ0123456789ABCDEF<>{}[]|;:#!$%'.split('');
+      const fs = 13;
+      let drops = [];
+      function init() {
+        drops = Array.from({ length: Math.floor(canvas.width / fs) }, () => Math.floor(Math.random() * -50));
+      }
+      init();
+      function draw() {
+        ctx.fillStyle = 'rgba(13,13,13,0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#ff2222';
+        ctx.font = fs + 'px monospace';
+        drops.forEach((y, i) => {
+          if (y >= 0) ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fs, y * fs);
+          if (y * fs > canvas.height && Math.random() > 0.975) drops[i] = Math.floor(Math.random() * -20);
+          drops[i]++;
+        });
+      }
+      setInterval(draw, 55);
+    })();
+
+    /* ── Terminal output ── */
+    (function() {
+      const el  = document.getElementById('term-body');
+      const url = 'https://j4mes.dev' + window.location.pathname;
+
+      const lines = [
+        { cls: 't-cmd', text: '$ curl ' + url },
+        { cls: 't-blank', text: '' },
+        { cls: 't-err', text: '[✗] ERROR 404 — target not found' },
+        { cls: 't-err', text: '[✗] Directory enumeration failed' },
+        { cls: 't-err', text: '[✗] No Admin Interfaces. No Secret Listings. Nothing.' },
+        { cls: 't-blank', text: '' },
+        { cls: 't-nav', text: 'nav' },
+      ];
+
+      let li = 0;
+
+      function nextLine() {
+        if (li >= lines.length) return;
+        const line = lines[li++];
+        const div  = document.createElement('div');
+
+        if (line.cls === 't-blank') {
+          div.className = 't-blank';
+          el.appendChild(div);
+          setTimeout(nextLine, 80);
+          return;
+        }
+
+        if (line.cls === 't-nav') {
+          div.className = 't-nav';
+          div.innerHTML = '<span class="arrow">[→] Try: </span><a href="/writing.html">~/writing</a><span class="sep">·</span><a href="/about.html">~/about</a><span class="sep">·</span><a href="/index.html">~/</a>';
+          el.appendChild(div);
+          return;
+        }
+
+        div.className = line.cls;
+        el.appendChild(div);
+        typeLine(div, line.text, nextLine);
+      }
+
+      function typeLine(el, text, cb) {
+        let i = 0;
+        function next() {
+          if (i < text.length) {
+            el.textContent += text[i++];
+            setTimeout(next, 16 + Math.random() * 16);
+          } else {
+            setTimeout(cb, 80);
+          }
+        }
+        next();
+      }
+
+      setTimeout(nextLine, 900);
+    })();
+  </script>
+
+</body>
+</html>
