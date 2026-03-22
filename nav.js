@@ -5,11 +5,11 @@
 
 /* ── Search index — add a line every time you publish ── */
 const SEARCH_INDEX = [
-  { title: "About",                             path: "~/about",                      url: "/about.html",                    tags: [] },
-  { title: "Writing",                           path: "~/writing",                    url: "/writing.html",                  tags: [] },
-  { title: "Getting OSCP in 2026",              path: "~/writing/getting-oscp-2026",  url: "/posts/getting-oscp-2026.html",  tags: ["--cert", "--offsec"] },
-  { title: "Why I use FFUF over everything",    path: "~/writing/why-i-use-ffuf",     url: "/posts/why-i-use-ffuf.html",     tags: ["--tools"] },
-  { title: "Salary negotiation as a pentester", path: "~/writing/salary-negotiation", url: "/posts/salary-negotiation.html", tags: ["--career"] }
+  { title: "About",                             path: "~/about",                      url: "/about",                    tags: [] },
+  { title: "Writing",                           path: "~/writing",                    url: "/writing",                  tags: [] },
+  { title: "Getting OSCP in 2026",              path: "~/writing/getting-oscp-2026",  url: "/posts/getting-oscp-2026",  tags: ["--cert", "--offsec"] },
+  { title: "Why I use FFUF over everything",    path: "~/writing/why-i-use-ffuf",     url: "/posts/why-i-use-ffuf",     tags: ["--tools"] },
+  { title: "Salary negotiation as a pentester", path: "~/writing/salary-negotiation", url: "/posts/salary-negotiation", tags: ["--career"] }
 ];
 
 /* ── Search ── */
